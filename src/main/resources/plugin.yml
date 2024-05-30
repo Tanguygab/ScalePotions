@@ -1,0 +1,4 @@
+name: ScalePotions
+version: '${version}'
+main: io.github.tanguygab.scalepotions.ScalePotions
+api-version: '1.20'
