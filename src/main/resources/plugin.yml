@@ -2,3 +2,9 @@ name: ScalePotions
 version: '${version}'
 main: io.github.tanguygab.scalepotions.ScalePotions
 api-version: '1.20'
+author: Tanguygab
+description: "Adds custom potions that can change your scale"
+commands:
+  scalepotions:
+    aliases: sp
+    permission: scalepotions.admin

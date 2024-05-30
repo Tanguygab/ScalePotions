@@ -1,0 +1,25 @@
+potions:
+  growth-1:
+    color: ff0000
+    seconds: 60
+    scale: 4
+    step-height: 2
+    block-reach: 6
+    entity-reach: 6
+    name: "&fGrowth Potion (Level 1)"
+    lore:
+      - ""
+      - "&7This potion makes you grow"
+      - "&74 times your size!"
+  shrink-1:
+    color: ae00ff
+    seconds: 60
+    scale: .5
+    step-height: .25
+    block-reach: 2.5
+    entity-reach: 1.5
+    name: "&fShrink Potion (Level 1)"
+    lore:
+      - ""
+      - "&7This potion makes you shrink"
+      - "&72 times your size!"
