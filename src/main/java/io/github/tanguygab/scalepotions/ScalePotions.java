@@ -82,13 +82,15 @@ public final class ScalePotions extends JavaPlugin {
             ScalePotion potion = potions.get(name);
             values = potion.getAttributes();
 
-            getServer().getScheduler().runTaskLater(this, () -> {
-                if (!player.isOnline()) {
-                    offlinePlayers.add(player.getUniqueId().toString());
-                    return;
-                }
-                setPlayerAttributes(player,null);
-            }, potion.getSeconds() * 20L);
+            if (potion.getSeconds() >= 0) {
+                getServer().getScheduler().runTaskLater(this, () -> {
+                    if (!player.isOnline()) {
+                        offlinePlayers.add(player.getUniqueId().toString());
+                        return;
+                    }
+                    setPlayerAttributes(player, null);
+                }, potion.getSeconds() * 20L);
+            }
         }
 
         values.forEach((attribute,value)->{
