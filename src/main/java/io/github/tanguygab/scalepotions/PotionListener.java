@@ -1,6 +1,15 @@
 package io.github.tanguygab.scalepotions;
 
+import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.TextComponent;
+import org.bukkit.Location;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.AreaEffectCloud;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -18,20 +27,38 @@ public class PotionListener implements Listener {
 
     private final ScalePotions plugin;
     private final Map<AreaEffectCloud,String> lingeringPotions = new HashMap<>();
+    private final BaseComponent crushedMsg = TextComponent.fromLegacy(ChatColor.RED+"You're getting crushed!");
 
     public PotionListener(ScalePotions plugin) {
         this.plugin = plugin;
 
         plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin,()->{
             for (Player player : plugin.getServer().getOnlinePlayers()) {
+                Location loc = player.getLocation();
+
                 for (AreaEffectCloud cloud : lingeringPotions.keySet()) {
-                    if (player.getLocation().distance(cloud.getLocation()) <= cloud.getRadius()) {
+                    if (loc.distance(cloud.getLocation()) <= cloud.getRadius()) {
                         plugin.setPlayerAttributes(player, lingeringPotions.get(cloud));
                         break;
                     }
                 }
+
+                if (player.isFlying() || (!loc.getBlock().getRelative(BlockFace.DOWN).getType().isAir() && loc.getY() == loc.getBlockY())) continue;
+
+                double size = player.getAttribute(Attribute.GENERIC_SCALE).getBaseValue();
+
+                for (Entity entity : player.getNearbyEntities(size/3,.5,size/3)) {
+                    if (!(entity instanceof LivingEntity le)) continue;
+
+                    double distance = loc.getY() - entity.getLocation().getY();
+                    double entitySize = le.getAttribute(Attribute.GENERIC_SCALE).getBaseValue();
+                    if (distance < 0 || entitySize >= size) continue;
+
+                    le.damage(size/entitySize,player);
+                    if (le instanceof Player p) p.spigot().sendMessage(ChatMessageType.ACTION_BAR,crushedMsg);
+                }
             }
-        },0,20);
+        },0,10);
     }
 
     @EventHandler
