@@ -7,6 +7,7 @@ potions:
     block-reach: 6
     entity-reach: 6
     speed: .05
+    max-health: 40
     name: "&fGrowth Potion (Level 1)"
     lore:
       - ""
@@ -20,6 +21,7 @@ potions:
     block-reach: 2.5
     entity-reach: 1.5
     speed: .2
+    max-health: 10
     name: "&fShrink Potion (Level 1)"
     lore:
       - ""

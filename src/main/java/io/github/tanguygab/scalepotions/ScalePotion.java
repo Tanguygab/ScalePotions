@@ -8,7 +8,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.persistence.PersistentDataType;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -21,19 +20,15 @@ public class ScalePotion {
     private final List<String> lore;
     private final Color color;
     private final int seconds;
-    private final Map<Attribute,Double> attributes = new HashMap<>();
+    private final Map<Attribute,Double> attributes;
 
-    public ScalePotion(String name, String displayName, List<String> lore, Color color, int seconds, double scale, double stepHeight, double blockReach, double entityReach, double speed) {
+    public ScalePotion(String name, String displayName, List<String> lore, Color color, int seconds, Map<Attribute,Double> attributes) {
         this.name = name;
         this.displayName = displayName;
         this.lore = lore;
         this.color = color;
         this.seconds = seconds;
-        attributes.put(Attribute.GENERIC_SCALE,scale);
-        attributes.put(Attribute.GENERIC_STEP_HEIGHT,stepHeight);
-        attributes.put(Attribute.PLAYER_BLOCK_INTERACTION_RANGE,blockReach);
-        attributes.put(Attribute.PLAYER_ENTITY_INTERACTION_RANGE,entityReach);
-        attributes.put(Attribute.GENERIC_MOVEMENT_SPEED,speed);
+        this.attributes = attributes;
     }
 
     public ItemStack getPotion(int amount, Material type) {

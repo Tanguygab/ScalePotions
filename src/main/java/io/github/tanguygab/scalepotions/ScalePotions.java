@@ -14,11 +14,12 @@ import java.util.*;
 public final class ScalePotions extends JavaPlugin {
 
     public static final Map<Attribute, Double> baseAttributes = new HashMap<>() {{
-        put(Attribute.GENERIC_SCALE, 1.0);
+        put(Attribute.GENERIC_SCALE, 1.);
         put(Attribute.GENERIC_STEP_HEIGHT, 0.6);
         put(Attribute.PLAYER_BLOCK_INTERACTION_RANGE, 4.5);
-        put(Attribute.PLAYER_ENTITY_INTERACTION_RANGE, 3.0);
+        put(Attribute.PLAYER_ENTITY_INTERACTION_RANGE, 3.);
         put(Attribute.GENERIC_MOVEMENT_SPEED, 0.1);
+        put(Attribute.GENERIC_MAX_HEALTH, 20.);
     }};
 
     public final Map<String, ScalePotion> potions = new HashMap<>();
@@ -46,17 +47,21 @@ public final class ScalePotions extends JavaPlugin {
                 getLogger().warning("Invalid color "+color+" for potion "+potion+"! Defaulting to red");
                 rgb = Color.RED;
             }
+            Map<Attribute, Double> attributes = new HashMap<>() {{
+                put(Attribute.GENERIC_SCALE,data.getDouble("scale",baseAttributes.get(Attribute.GENERIC_SCALE)));
+                put(Attribute.GENERIC_STEP_HEIGHT,data.getDouble("step-height",baseAttributes.get(Attribute.GENERIC_STEP_HEIGHT)));
+                put(Attribute.PLAYER_BLOCK_INTERACTION_RANGE,data.getDouble("block-reach",baseAttributes.get(Attribute.PLAYER_BLOCK_INTERACTION_RANGE)));
+                put(Attribute.PLAYER_ENTITY_INTERACTION_RANGE,data.getDouble("entity-reach",baseAttributes.get(Attribute.PLAYER_ENTITY_INTERACTION_RANGE)));
+                put(Attribute.GENERIC_MOVEMENT_SPEED,data.getDouble("speed",baseAttributes.get(Attribute.GENERIC_MOVEMENT_SPEED)));
+                put(Attribute.GENERIC_MAX_HEALTH,data.getDouble("max-health",baseAttributes.get(Attribute.GENERIC_MAX_HEALTH)));
+            }};
 
             potions.put(potion,new ScalePotion(potion,
                     color(displayName),
                     lore.stream().map(this::color).toList(),
                     rgb,
                     data.getInt("seconds",60),
-                    data.getDouble("scale",baseAttributes.get(Attribute.GENERIC_SCALE)),
-                    data.getDouble("step-height",baseAttributes.get(Attribute.GENERIC_STEP_HEIGHT)),
-                    data.getDouble("block-reach",baseAttributes.get(Attribute.PLAYER_BLOCK_INTERACTION_RANGE)),
-                    data.getDouble("entity-reach",baseAttributes.get(Attribute.PLAYER_ENTITY_INTERACTION_RANGE)),
-                    data.getDouble("speed",baseAttributes.get(Attribute.GENERIC_MOVEMENT_SPEED))
+                    attributes
             ));
         });
 
