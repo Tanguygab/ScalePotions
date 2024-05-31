@@ -1,6 +1,7 @@
 package io.github.tanguygab.scalepotions;
 
 import net.md_5.bungee.api.ChatColor;
+import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
@@ -8,10 +9,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public final class ScalePotions extends JavaPlugin {
 
@@ -22,9 +20,9 @@ public final class ScalePotions extends JavaPlugin {
         put(Attribute.PLAYER_ENTITY_INTERACTION_RANGE, 3.0);
         put(Attribute.GENERIC_MOVEMENT_SPEED, 0.1);
     }};
-    public static final List<String> offlinePlayers = new ArrayList<>();
 
     public final Map<String, ScalePotion> potions = new HashMap<>();
+    public final Map<String, Integer> scaledPlayers = new HashMap<>();
 
     @Override
     public void onEnable() {
@@ -64,11 +62,39 @@ public final class ScalePotions extends JavaPlugin {
 
         getCommand("scalepotions").setExecutor(new SPCommand(this));
         getServer().getPluginManager().registerEvents(new PotionListener(this),this);
+
+        ConfigurationSection players = getConfig().getConfigurationSection("scaled-players");
+        if (players != null) {
+            players.getValues(false).forEach((uuid,seconds)->scaledPlayers.put(uuid, (int) seconds));
+            getConfig().set("scaled-players",null);
+            saveConfig();
+        }
+
+        getServer().getScheduler().scheduleSyncRepeatingTask(this,()->{
+            for (String uuid : scaledPlayers.keySet()) {
+                Player player = Bukkit.getPlayer(UUID.fromString(uuid));
+
+                if (player == null || !player.isOnline()) return;
+
+                int seconds = scaledPlayers.get(uuid);
+                if (seconds <= 1) {
+                    scaledPlayers.remove(uuid);
+                    setPlayerAttributes(player,null);
+                    return;
+                }
+                scaledPlayers.put(uuid,seconds-1);
+
+            }
+        },0,20);
     }
 
     @Override
     public void onDisable() {
         potions.clear();
+        if (!scaledPlayers.isEmpty()) {
+            getConfig().set("scaled-players",scaledPlayers);
+            saveConfig();
+        }
     }
 
     public String color(String message) {
@@ -84,15 +110,8 @@ public final class ScalePotions extends JavaPlugin {
             ScalePotion potion = potions.get(name);
             values = potion.getAttributes();
 
-            if (potion.getSeconds() >= 0) {
-                getServer().getScheduler().runTaskLater(this, () -> {
-                    if (!player.isOnline()) {
-                        offlinePlayers.add(player.getUniqueId().toString());
-                        return;
-                    }
-                    setPlayerAttributes(player, null);
-                }, potion.getSeconds() * 20L);
-            }
+            int seconds = potion.getSeconds();
+            if (seconds >= 0) scaledPlayers.put(player.getUniqueId().toString(),seconds);
         }
 
         values.forEach((attribute,value)->{

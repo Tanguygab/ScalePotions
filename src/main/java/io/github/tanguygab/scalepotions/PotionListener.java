@@ -1,6 +1,5 @@
 package io.github.tanguygab.scalepotions;
 
-import org.bukkit.Location;
 import org.bukkit.entity.AreaEffectCloud;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -8,7 +7,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.LingeringPotionSplashEvent;
 import org.bukkit.event.entity.PotionSplashEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
@@ -34,16 +32,6 @@ public class PotionListener implements Listener {
                 }
             }
         },0,20);
-    }
-
-    @EventHandler
-    public void onJoin(PlayerJoinEvent e) {
-        Player player = e.getPlayer();
-        String uuid = player.getUniqueId().toString();
-        if (ScalePotions.offlinePlayers.contains(uuid)) {
-            ScalePotions.offlinePlayers.remove(uuid);
-            plugin.setPlayerAttributes(player,null);
-        }
     }
 
     @EventHandler
