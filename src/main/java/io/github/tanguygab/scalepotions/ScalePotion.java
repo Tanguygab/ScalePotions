@@ -23,7 +23,7 @@ public class ScalePotion {
     private final int seconds;
     private final Map<Attribute,Double> attributes = new HashMap<>();
 
-    public ScalePotion(String name, String displayName, List<String> lore, Color color, int seconds, double scale, double stepHeight, double blockReach, double entityReach) {
+    public ScalePotion(String name, String displayName, List<String> lore, Color color, int seconds, double scale, double stepHeight, double blockReach, double entityReach, double speed) {
         this.name = name;
         this.displayName = displayName;
         this.lore = lore;
@@ -33,6 +33,7 @@ public class ScalePotion {
         attributes.put(Attribute.GENERIC_STEP_HEIGHT,stepHeight);
         attributes.put(Attribute.PLAYER_BLOCK_INTERACTION_RANGE,blockReach);
         attributes.put(Attribute.PLAYER_ENTITY_INTERACTION_RANGE,entityReach);
+        attributes.put(Attribute.GENERIC_MOVEMENT_SPEED,speed);
     }
 
     public ItemStack getPotion(int amount, Material type) {

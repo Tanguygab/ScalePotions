@@ -20,6 +20,7 @@ public final class ScalePotions extends JavaPlugin {
         put(Attribute.GENERIC_STEP_HEIGHT, 0.6);
         put(Attribute.PLAYER_BLOCK_INTERACTION_RANGE, 4.5);
         put(Attribute.PLAYER_ENTITY_INTERACTION_RANGE, 3.0);
+        put(Attribute.GENERIC_MOVEMENT_SPEED, 0.1);
     }};
     public static final List<String> offlinePlayers = new ArrayList<>();
 
@@ -56,7 +57,8 @@ public final class ScalePotions extends JavaPlugin {
                     data.getDouble("scale",baseAttributes.get(Attribute.GENERIC_SCALE)),
                     data.getDouble("step-height",baseAttributes.get(Attribute.GENERIC_STEP_HEIGHT)),
                     data.getDouble("block-reach",baseAttributes.get(Attribute.PLAYER_BLOCK_INTERACTION_RANGE)),
-                    data.getDouble("entity-reach",baseAttributes.get(Attribute.PLAYER_ENTITY_INTERACTION_RANGE))
+                    data.getDouble("entity-reach",baseAttributes.get(Attribute.PLAYER_ENTITY_INTERACTION_RANGE)),
+                    data.getDouble("speed",baseAttributes.get(Attribute.GENERIC_MOVEMENT_SPEED))
             ));
         });
 

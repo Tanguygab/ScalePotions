@@ -6,6 +6,7 @@ potions:
     step-height: 2
     block-reach: 6
     entity-reach: 6
+    speed: .05
     name: "&fGrowth Potion (Level 1)"
     lore:
       - ""
@@ -18,6 +19,7 @@ potions:
     step-height: .25
     block-reach: 2.5
     entity-reach: 1.5
+    speed: .2
     name: "&fShrink Potion (Level 1)"
     lore:
       - ""
